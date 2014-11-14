@@ -142,6 +142,12 @@ int main(int argc, char *argv[]) {
 	} else {
 		printf("Setting server address as [%s] and port as [%d]", address, port);
 	}
+
+	/*
+	* We will send a nonce to make the server listen to us
+	*/
+	client.send(address, port, "Nonce");
+	
 	usb_monitor_init(take_action, "Hi Folks");
 	return EXIT_SUCCESS;
 }

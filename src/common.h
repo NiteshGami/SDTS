@@ -9,6 +9,9 @@
 #define COMMON_H_
 #include <unistd.h>
 #include <errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 typedef enum {
 	NONE,
 	SEND,

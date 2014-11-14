@@ -4,12 +4,8 @@
  *  Created on: Nov 10, 2014
  *      Author: s.sikder
  */
+#include "common.h"
 #include "sock_client.h"
-#include <errno.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-
 int sock_send(const char *address, int port, const char *message) {
 	int sock_fd = 0, connected = 0, written = 0;
 	int true = 1;
@@ -45,7 +41,7 @@ int sock_send(const char *address, int port, const char *message) {
 	printf("*************%s(%d)*****************\n",buff,len_buf);
 	while(len_buf != written) {
 		written += write(connected, buff+written, strlen(buff));
-		printf("writeen :%d\n");
+		printf("writeen :%d\n", written);
 	}
 
 	close(connected);
