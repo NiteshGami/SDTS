@@ -1,0 +1,26 @@
+Upadate thw reson behind your change
+[Latest on top]
+
+Reason : Adding changelog
+05f50ea Delete .target.info
+Reason : Not needed
+2bd2c45 Remove unnecessary files
+Reason : Not needed
+34c74ca Remove device dependency
+Reason : New way of detecting device info
+2f1fc04 Fix first connect
+Reason : Every server sends the first data [implicitly/explicitly]
+If server writes first then it is ok
+Either we have to write the first data from server	\
+or we have to ignore the forst read.			\
+Here the second approach taken				\
+8ebb3ee Hi temp
+Reason : Unknown (Please update)
+0367984 Add makefile for server
+Reason : Automate the server build
+4d0ce7f Intial SDTS.
+Reason : Git repo creation
+09ab35f first commit
+Reason : Pre-git
+a5acc7b Initial commit
+Reason : Pre-pre-git
