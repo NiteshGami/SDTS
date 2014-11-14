@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
 	int bytes_read =  0;
 	int ret_val = -1;
 	pid_t c_pid = -1;
-	skfd = socket(PF_INET, SOCK_STREAM, 0);
+	skfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (skfd < 0) {
 		fprintf(stderr, "Error creating socket\n");
 		return -ENOMEM;
@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
 	}
 
 	struct sockaddr_in name;
-	name.sin_family = PF_INET;
+	name.sin_family = AF_INET;
 	name.sin_port = (in_port_t) htons(10006);
 	name.sin_addr.s_addr = htonl(INADDR_ANY);
 	printf("Bind Set\n");

@@ -17,7 +17,7 @@ int sock_send(const char *address, int port, const char *message) {
 	char buff[256];
 	int len_buf = -1;
 
-	sock_fd = socket(PF_INET, SOCK_STREAM, 0);
+	sock_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (sock_fd < 0) {
 		fprintf(stderr, "Could not open socket");
 		return -EOPNOTSUPP;
@@ -28,7 +28,7 @@ int sock_send(const char *address, int port, const char *message) {
 	}
 
 	bzero((char *) &server, sizeof(server));
-	server.sin_family = PF_INET;
+	server.sin_family = AF_INET;
 	server.sin_addr.s_addr = inet_addr(address);
 	server.sin_port = htons(port);
 
