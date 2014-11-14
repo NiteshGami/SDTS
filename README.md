@@ -1,4 +1,4 @@
-SDTS
-====
+track-device
+============
 
-Device Tracking System
+Track Tizen devices. Later we will do in for android too.

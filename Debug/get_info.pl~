@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+$sdb = "sdb";
+$out = `$sdb devices`;
+@array = split('\n', $out);
+my $listof = shift(@array);
+
+if ($listof !~ /^list/i) {
+	$sdb = "~/tizen-sdk/tools/sdb";
+	$out = `$sdb devices`;
+	@array = split('\n', $out);
+	my $listof = shift(@array);
+        die "Install sdb properly, contact system team" unless $listof =~ /^list/i;
+}
+
+`touch final.info`;
+`echo \"\" > final.info`
+
+while (my $var = shift(@array)) {
+	my @line = split('\s', $var);
+	my $device = shift(@line);
+	print "$device\n";
+	$cmd = "$sdb -s $device";
+	#print "$cmd root on; $cmd pull /opt/etc/.mac.info .";
+	`$cmd root on; $cmd pull /opt/etc/.target.info .`;
+	`cat .target.info >> final.info`;
+}
