@@ -83,7 +83,7 @@ node_t *get_target_info() {
 	node_t *head = NULL, *temp = NULL;
 	int ret = -1;
 
-	execute_script("perl", "get_info.pl");
+	execute_script("perl", "dev.pl");
 	sleep(3);
 	file = fopen("final.info", "r");
 	if (file <= 0) {
