@@ -63,11 +63,8 @@ int main(int argc, char **argv) {
 			int bread = 0;
 			printf("inside\n");
 			bzero(buf, sizeof(buf));
-			bread = read(conn, buf, sizeof(buf));
-			if (bread <= 0 || !(*buf)) goto ch_clean;
-			//TODO enter DB;
+			read(conn, buf, sizeof(buf));
 			printf("Printing %s\n", buf);
-ch_clean:
 			close(conn);
 			close(skfd);
 			return 0;
