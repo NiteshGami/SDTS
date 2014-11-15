@@ -16,9 +16,7 @@
 int main(int argc, char **argv) {
 	int true = 1;
 	int skfd, conn;
-	int bytes_read =  0;
-	int ret_val = -1;
-	pid_t c_pid = -1;
+
 	skfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (skfd < 0) {
 		fprintf(stderr, "Error creating socket\n");
@@ -61,15 +59,15 @@ int main(int argc, char **argv) {
 		} else {
 			printf("Got connection from %s(%ud)\n",inet_ntoa(client.sin_addr), ntohs(client.sin_port));
 		}
-		if (1) {
+		if (!fork()) {
+			int bread = 0;
 			printf("inside\n");
 			bzero(buf, sizeof(buf));
-			while((ret_val = read(conn, buf+bytes_read, sizeof(buf)-bytes_read)) > 0) {
-				bytes_read += ret_val;
-				printf("inside\n");
-			}
+			bread = read(conn, buf, sizeof(buf));
+			if (bread <= 0 || !(*buf)) goto ch_clean;
 			//TODO enter DB;
 			printf("Printing %s\n", buf);
+ch_clean:
 			close(conn);
 			close(skfd);
 			return 0;
