@@ -66,14 +66,6 @@ int usb_monitor_init(usb_detected_cb detected, void *data) {
 			return -ENODEV;
 		}
 
-		printf("  VID/PID: %s %s\n",
-				udev_device_get_sysattr_value(dev,"idVendor"),
-				udev_device_get_sysattr_value(dev, "idProduct"));
-		printf("  %s\n  %s\n",
-				udev_device_get_sysattr_value(dev,"manufacturer"),
-				udev_device_get_sysattr_value(dev,"product"));
-		printf("  serial: %s\n",
-				 udev_device_get_sysattr_value(dev, "serial"));
 		udev_device_unref(dev);
 	}
 	/* Free the enumerator object */

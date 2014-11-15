@@ -40,19 +40,9 @@ int execute_script(const char * command, const char *file_path)
 {
 	pid_t pid = 0;
 	int status = -1;
-	errno = 0;
-
-	printf("****************(%s,%s)**********\n",command, file_path);
-	/*while (args[index] != NULL) {
-		printf("%s", args[index]);
-		index++;
-	}*/
 
 	if (!(pid = fork())) {
-		printf("pid(%d), ppid (%d)", getpid(), getppid());
-		printf("Inside child, exec (%s) command\n", file_path);
 
-		errno = 0;
 		if (execlp(command, command, file_path, NULL) == -1) {
 			printf("Fail to execute command (%s)\n", strerror(errno));
 			exit(-1);
@@ -62,13 +52,10 @@ int execute_script(const char * command, const char *file_path)
 		if (waitpid(pid, &status, 0) == -1) {
 			printf("wait pid (%u) status (%d)\n", pid, status);
 		}
-		printf("Waiting for child\n");
+
 		if(status == -1) {
 			printf("execlp failed\n");
-		} else if(status == 0) {
-			printf("execlp success status: %d\n",status);
 		}
-
 		return status;
 	}
 
@@ -89,7 +76,6 @@ node_t *get_target_info() {
 	if (file <= 0) {
 		printf("Error openning");
 	}
-	printf("opened file\n");
 	bzero(line, sizeof(line));
 	while(fscanf(file, "%s", line) > 0) {
 		printf("line = %s\n", line);
@@ -103,19 +89,12 @@ node_t *get_target_info() {
 	};
 	fclose(file);
 	ret = remove("final.info");
-	if(ret) {
-		printf("not able to delete\n");
-	} else {
-		printf("file deleted");
-	}
 	return head;
 }
 
 static void take_action(action_e act, void *data) {
 	node_t *head = NULL;
 	node_t *trav = NULL, *t;
-	printf("Take Action called\n");
-	sleep(3);
 	head = get_target_info();
 	trav = head;
 	while(trav) {
@@ -134,7 +113,7 @@ static void take_action(action_e act, void *data) {
 
 int main(int argc, char *argv[]) {
 	get_mac();
-	//printf("%s", mac);
+
 	if (argc == 3) {
 		bzero(address, sizeof(address));
 		strncpy(address, argv[1], 31 * sizeof(char));
@@ -143,11 +122,6 @@ int main(int argc, char *argv[]) {
 		printf("Setting server address as [%s] and port as [%d]", address, port);
 	}
 
-	/*
-	* We will send a nonce to make the server listen to us
-	*/
-	client.send(address, port, "Nonce");
-	
 	usb_monitor_init(take_action, "Hi Folks");
 	return EXIT_SUCCESS;
 }
