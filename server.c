@@ -77,7 +77,9 @@ int main(int argc, char **argv) {
 			return -ECONNREFUSED;
 		}
 
-		if (!fork()) {
+		pid_t pid = -1;
+
+		if (!(pid = fork())) {
 			char *p = NULL, *mac = NULL;
 			char buf[256];
 			char serial[64];
@@ -90,9 +92,10 @@ int main(int argc, char **argv) {
 			*(--p) = '\0';
 			ret_val = sqlite3_open(DB_Path, &DB);
 
-			if(ret_val != SQLITE_OK)
+			if(ret_val != SQLITE_OK) {
 				printf("Not able to open database :%s\n", sqlite3_errmsg(DB));
-
+				exit(-101);
+			}
 			printf("Received: %s--->%s\n",serial, mac);
 			memset(query, 0, sizeof(query));
 			snprintf(query, sizeof(query),"REPLACE INTO device_detected_table(serial_no, mac_address) VALUES(\"%s\",\"%s\");",serial,mac);
@@ -101,6 +104,7 @@ int main(int argc, char **argv) {
 
 			if(ret_val != SQLITE_OK) {
 				printf("Insertion Failed\n");
+				exit(-202);
 			} else {
 				printf("Insertion Successful\n");
 			}
@@ -108,7 +112,11 @@ int main(int argc, char **argv) {
 			sqlite3_close(DB);
 			close(conn);
 			close(skfd);
-			return 0;
+			exit(0);
+		} else if (pid > 0) {
+			int status;
+			if (waitpid(pid, &status, 0) < 0)
+				printf("wait pid (%u) status (%d)\n", pid, status);
 		} else {
 			close(conn);
 		}
