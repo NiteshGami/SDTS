@@ -26,18 +26,17 @@ int main(int argc, char **argv) {
 
 	ret_val = sqlite3_open(DB_Path, &DB);
 
-	if(ret_val != SQLITE_OK) {
+	if(ret_val != SQLITE_OK)
 		printf("Not able to open database :%s\n", sqlite3_errmsg(DB));
-	}
-
 	strcpy(query, "CREATE TABLE IF NOT EXISTS device_detected_table (serial_no VARCHAR(100), mac_address VARCHAR(100)," \
 					"date_time TIMESTAMP DEFAULT(datetime(current_timestamp,'localtime')), PRIMARY KEY(serial_no, mac_address));");
 
 	ret_val = sqlite3_exec(DB, query, NULL, 0, NULL);
 
-	if(ret_val != SQLITE_OK) {
+	if(ret_val != SQLITE_OK)
 		printf("Table Creation Failed\n");
-	}
+
+	sqlite3_close(DB);
 
 	skfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (skfd < 0) {
@@ -45,9 +44,8 @@ int main(int argc, char **argv) {
 		return -ENOMEM;
 	}
 
-	if (setsockopt(skfd, SOL_SOCKET, SO_REUSEADDR, &true, sizeof(int)) == -1) {
+	if (setsockopt(skfd, SOL_SOCKET, SO_REUSEADDR, &true, sizeof(int)) == -1)
 		fprintf(stderr, "Error reuse\n");
-	}
 
 	if (argc == 2) {
 		port = atoi(argv[1]);
@@ -90,6 +88,10 @@ int main(int argc, char **argv) {
 			p = serial;
 			while((*p++ =*mac++) != ';');
 			*(--p) = '\0';
+			ret_val = sqlite3_open(DB_Path, &DB);
+
+			if(ret_val != SQLITE_OK)
+				printf("Not able to open database :%s\n", sqlite3_errmsg(DB));
 
 			printf("Received: %s--->%s\n",serial, mac);
 			memset(query, 0, sizeof(query));
@@ -102,6 +104,8 @@ int main(int argc, char **argv) {
 			} else {
 				printf("Insertion Successful\n");
 			}
+
+			sqlite3_close(DB);
 			close(conn);
 			close(skfd);
 			return 0;
@@ -110,7 +114,6 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	sqlite3_close(DB);
 	close(skfd);
 	return 0;
 }
