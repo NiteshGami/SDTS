@@ -1,7 +1,7 @@
 configure:
 	sudo apt-get install libusb-dev libudev-dev
 all:
-	gcc *.c -o target
+	gcc *.c -o target -lusb
 install:
 	cp target /usr/bin/
 	cp dev.pl /usr/bin/
