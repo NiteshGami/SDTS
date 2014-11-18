@@ -68,7 +68,6 @@ node_t *get_target_info() {
 	char line[256];
 	char *data;
 	node_t *head = NULL, *temp = NULL;
-	int ret = -1;
 
 	execute_script("perl", "dev.pl");
 	sleep(3);
@@ -88,7 +87,7 @@ node_t *get_target_info() {
 		head = temp;
 	};
 	fclose(file);
-	ret = remove("final.info");
+	remove("final.info");
 	return head;
 }
 

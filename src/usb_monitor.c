@@ -49,7 +49,7 @@ int usb_monitor_init(usb_detected_cb detected, void *data) {
 
 		/* usb_device_get_devnode() returns the path to the device node
 		   itself in /dev. */
-		printf("Device Node Path: %s\n", udev_device_get_devnode(dev));
+		//printf("Device Node Path: %s\n", udev_device_get_devnode(dev));
 
 		/* The device pointed to by dev contains information about
 		   the hidraw device. In order to get information about the
@@ -92,15 +92,15 @@ int usb_monitor_init(usb_detected_cb detected, void *data) {
 			dev = udev_monitor_receive_device(mon);
 			if (dev) {
 				if (udev_device_get_devnode(dev) == NULL) {
-					fprintf(stderr, "\nNode : NULL");
+					//fprintf(stderr, "\nNode : NULL");
 					goto cont;
 				}
 				if (strcmp(udev_device_get_devtype(dev), "usb_device")) {
-					fprintf(stderr, "Type : nousb");
+					//fprintf(stderr, "Type : nousb");
 					goto cont;
 				}
 				if (!strcmp(udev_device_get_action(dev), "remove")) {
-					fprintf(stderr, "Action : remove");
+					//fprintf(stderr, "Action : remove");
 					goto cont;
 				}
 				printf("Got Device\n");
@@ -114,7 +114,6 @@ cont:
 			}
 		}
 		usleep(250*1000);
-		printf(".");
 		fflush(stdout);
 	}
 
