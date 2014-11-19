@@ -6,6 +6,6 @@ while($_ = shift @devices) {
     		push (@samdevs, $1) if ($_ =~ m/serialnumber\=(\S+)/i);
 	}
 }
-print "@samdevs\n";
+#!print "@samdevs\n";
 open(OUT, ">", "final.info");
 print OUT "@samdevs\n";

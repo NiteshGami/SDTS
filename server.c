@@ -13,7 +13,13 @@
 #include <string.h>
 #include <unistd.h>
 #include<sqlite3.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include<semaphore.h>
 
+#define NAME "SDTSPS22RG"
+
+sem_t *mutex;
 static int port = 10006;
 static char *DB_Path = "./SDTS.db";
 
@@ -24,10 +30,14 @@ int main(int argc, char **argv) {
 	sqlite3 *DB = NULL;
 	char query[512] = {0};
 
+	if((mutex = sem_open(NAME, O_CREAT, 0644, 1)) == SEM_FAILED) {
+		printf("sem_open failed\n");
+	}
 	ret_val = sqlite3_open(DB_Path, &DB);
 
-	if(ret_val != SQLITE_OK)
+	if(ret_val != SQLITE_OK) {
 		printf("Not able to open database :%s\n", sqlite3_errmsg(DB));
+	}
 	strcpy(query, "CREATE TABLE IF NOT EXISTS device_detected_table (serial_no VARCHAR(100), mac_address VARCHAR(100)," \
 					"date_time TIMESTAMP DEFAULT(datetime(current_timestamp,'localtime')), PRIMARY KEY(serial_no, mac_address));");
 
@@ -98,6 +108,14 @@ int main(int argc, char **argv) {
 			memset(query, 0, sizeof(query));
 			snprintf(query, sizeof(query),"REPLACE INTO device_detected_table(serial_no, mac_address) VALUES(\"%s\",\"%s\");",serial,mac);
 
+			if((mutex = sem_open(NAME, O_CREAT, 0644, 1)) == SEM_FAILED) {
+				printf("sem_open failed\n");
+			}
+
+			if(sem_wait(mutex) < 0) {
+				printf("sem_wait failed\n");
+			}
+
 			ret_val = sqlite3_exec(DB, query, NULL, 0, NULL);
 
 			if(ret_val != SQLITE_OK) {
@@ -107,19 +125,29 @@ int main(int argc, char **argv) {
 				printf("Insertion Successful\n");
 			}
 
+			if(sem_post(mutex) < 0) {
+				printf("sem_post failed\n");
+			}
+
+			if(sem_close(mutex) < 0) {
+				printf("sem_close failed\n");
+			}
 			sqlite3_close(DB);
 			close(conn);
 			close(skfd);
 			exit(0);
-		}  else if (pid >0) {
-			int status = 0;
-			if (waitpid(pid, &status, 0) < 0)
-				printf("Child exec error %d", status);
-		} else {
+		}  else {
 			close(conn);
 		}
 	}
 
+	if(sem_close(mutex) < 0) {
+		printf("sem_close failed\n");
+	}
+
+	if(sem_unlink(NAME) < 0) {
+		printf("sem_unlink failed\n");
+	}
 	close(skfd);
 	return 0;
 }

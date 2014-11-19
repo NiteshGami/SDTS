@@ -77,7 +77,7 @@ node_t *get_target_info() {
 	}
 	bzero(line, sizeof(line));
 	while(fscanf(file, "%s", line) > 0) {
-		printf("line = %s\n", line);
+		//printf("line = %s\n", line);
 		data = (char *)malloc(strlen(line) * sizeof(char));
 		bzero(data, strlen(line) * sizeof(char));
 		strcpy(data, line);
