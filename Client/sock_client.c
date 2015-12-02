@@ -6,6 +6,12 @@
  */
 #include "common.h"
 #include "sock_client.h"
+/*
+ * General purpose socket client to connect to a server and send
+ * some information.
+ * In this case the device specific information
+ */
+
 int sock_send(const char *address, int port, const char *message) {
 	int sock_fd = 0, connected = 0;
 	struct sockaddr_in server;
@@ -33,7 +39,7 @@ int sock_send(const char *address, int port, const char *message) {
 	snprintf(buff, sizeof(buff), "%s", message);
 	write(sock_fd, buff, strlen(buff));
 
-	close(sock_fd);
+	close(sock_fd	return 0;
 	return 0;
 }
 

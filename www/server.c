@@ -1,8 +1,12 @@
 /*
  * server.c
  *
- *  Created on: Jul 28, 2014
- *      Author: s.sikder
+ *  Created on	: Jul 28, 2014
+ *      Author	: s.sikder
+ *  Description	: This is the server program which recieves
+ *  all the information about all the devices attached to any system
+ *  where the Client program is installed.
+ *  Processes the information and stores them into the DB.
  */
 #include <stdio.h>
 #include <sys/types.h>

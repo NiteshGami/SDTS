@@ -1,0 +1,4 @@
+dev.pl detects all the samsung devices attached on the PC
+usb_monitor is actually iterating over USB ports for interrupt
+targetinfo just structures the data in sending format
+sock_client sends data provided to it

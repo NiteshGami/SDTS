@@ -4,7 +4,7 @@
  Author      : m3ghd007
  Version     :
  Copyright   : Your copyright notice
- Description : Hello World in C, Ansi-style
+ Description : Extracts relevant information about a device AKA target
  ============================================================================
  */
 
@@ -23,6 +23,11 @@ typedef struct n {
 static char address[32] = "127.0.0.1";
 static int port = 10006;
 static char mac[32] = {'\0'};
+
+/*
+ *Extract MAC adderss of the device
+ */
+
 void get_mac() {
 	FILE *file;
 	char line[256];
@@ -35,6 +40,10 @@ void get_mac() {
 	strcpy(mac, line);
 	fclose(file);
 }
+
+/*
+ * Execute any script and get the result of it
+ */
 
 int execute_script(const char * command, const char *file_path)
 {
@@ -63,6 +72,11 @@ int execute_script(const char * command, const char *file_path)
 	return -EIO;
 }
 
+/*
+ * Run dev.pl for device information and retrieve info from
+ * final.info for sending it to server
+ */
+
 node_t *get_target_info() {
 	FILE *file;
 	char line[256];
@@ -90,6 +104,11 @@ node_t *get_target_info() {
 	remove("final.info");
 	return head;
 }
+
+/*
+ *Takes all the actions needed when any USB device is attached to the
+ *PC for latest information about the device
+ */
 
 static void take_action(action_e act, void *data) {
 	node_t *head = NULL;

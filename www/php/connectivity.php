@@ -1,27 +1,27 @@
-﻿<?php 
- 
+﻿<?php
+
 //error_reporting(0);
 
-function SignIn() 
+function SignIn()
 {
-	//session_start(); 
-	if(!empty($_POST['user'])) 
-	{ 
+	//session_start();
+	if(!empty($_POST['user']))
+	{
 		$username =$_POST['user'];
 		$password=$_POST['pass'];
 
-		try { 
-			$conn = new PDO('sqlite:SDTS.db'); 
-			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
-			$stmt = $conn->prepare("SELECT username,pass from login where username = :user AND pass = :passw"); 
+		try {
+			$conn = new PDO('sqlite:SDTS.db');
+			$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$stmt = $conn->prepare("SELECT username,pass from login where username = :user AND pass = :passw");
 
 			$stmt->bindParam(':user', $username, PDO::PARAM_STR, 20);
 			$stmt->bindParam(':passw', $password, PDO::PARAM_STR, 20);
-	
+
 			$stmt->execute();
 
 			$result = $stmt->fetchAll();
-		
+
 			if(empty($result))
 				echo "<script type='text/javascript'>alert('SORRY... YOU ENTERD WRONG ID AND PASSWORD... PLEASE 					RETRY...'); window.location.href='http://localhost/login.html';</script>";
 			else
@@ -29,10 +29,10 @@ function SignIn()
 
 			foreach ($result as $row)
 			{
-				$stmtdev = $conn->prepare("SELECT devid,devname,serialno,devtype FROM device where user = :id"); 
+				$stmtdev = $conn->prepare("SELECT devid,devname,serialno,devtype FROM device where user = :id");
 
 				$stmtdev->bindParam(':id', $username, PDO::PARAM_STR, 20);
-	
+
 				$stmtdev->execute();
 
 				$resultdev = $stmtdev->fetchAll();
@@ -41,9 +41,9 @@ function SignIn()
 				<html>
 				<head>
 					<title>Asset Tracking Demo</title>
-					<link rel='stylesheet' type='text/css' href='http://localhost/css/tableformat.css'> 	
+					<link rel='stylesheet' type='text/css' href='http://localhost/css/tableformat.css'>
 					<script type='text/javascript' src='http://localhost/js/jquery.js'></script>
-					<script type='text/javascript' src='http://localhost/js/rowexpansion.js'></script>     
+					<script type='text/javascript' src='http://localhost/js/rowexpansion.js'></script>
 				</head>
 				<body>
 					<h4 align = 'right'>Welcome $username !</h4>
@@ -78,10 +78,10 @@ function SignIn()
 				<tr class = 'one' align = 'center'>
 					<td><b><i>Id</i></b></td>
 					<td>
-						<b><i>Username</i></b> 
+						<b><i>Username</i></b>
 					</td>
 					<td>
-						<b><i>Date</i></b>  
+						<b><i>Date</i></b>
 					</td>
 					<td>
 						<b><i>Time</i></b>
@@ -89,10 +89,10 @@ function SignIn()
 				</tr>
 				";
 
-				$stmtvalue = $conn->prepare("SELECT userid,username,userloc,mysingle,extn,dateused,timeused from dummyinfo di INNER JOIN userinfo ui ON di.mac = ui.macaddress where di.serialno = :sno"); 
+				$stmtvalue = $conn->prepare("SELECT userid,username,userloc,mysingle,extn,dateused,timeused from dummyinfo di INNER JOIN userinfo ui ON di.mac = ui.macaddress where di.serialno = :sno");
 
 				$stmtvalue->bindParam(':sno', $serial, PDO::PARAM_STR, 20);
-	
+
 				$stmtvalue->execute();
 
 				$resultvalue = $stmtvalue->fetchAll();
@@ -107,15 +107,15 @@ function SignIn()
 					$uid = $rowvalue['userid'];
 					$date = $rowvalue['dateused'];
 					$time = $rowvalue['timeused'];
-					
+
 					echo"
 				<tr class = 'one' align = 'center'>
 					<td>$id.</td>
 					<td title='Name: $usern\nLocation: $loc\nMySingle: $email\nExtension: $ext'>
-						$uid 
+						$uid
 					</td>
 					<td>
-						$date 
+						$date
 					</td>
 					<td>
 						$time
@@ -123,26 +123,26 @@ function SignIn()
 				</tr>";
 				$id = $id+1;
 				}
-				
+
 				}
 				echo"
 				</table>
 				</body>
-				</html>";	
+				</html>";
 			  }
 			}
-		} catch( PDOException $Exception ) 
-		{ 
-			echo $Exception->getMessage() ."\n"; 
-		} 	
+		} catch( PDOException $Exception )
+		{
+			echo $Exception->getMessage() ."\n";
+		}
 	}
 
 }
 
-if(isset($_POST['submit'])) 
-{ 
-	SignIn(); 
-} 
+if(isset($_POST['submit']))
+{
+	SignIn();
+}
 
 ?>
 

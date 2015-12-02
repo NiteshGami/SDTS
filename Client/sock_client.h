@@ -13,6 +13,10 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netinet/tcp.h>
+/*
+ * Client interface to communicate with server
+ * Currently supports only send action
+ */
 
 struct client_t {
 	int (*send)(const char *, int, const char *);

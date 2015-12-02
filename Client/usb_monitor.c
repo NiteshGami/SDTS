@@ -1,8 +1,9 @@
 /*
  * usb_monitor.c
  *
- *  Created on: Nov 10, 2014
- *      Author: s.sikder
+ *  Created on	: Nov 10, 2014
+ *      Author	: s.sikder
+ *  Description	: Creates a monitor for all the USB ports
  */
 #include "common.h"
 #include "usb_monitor.h"
